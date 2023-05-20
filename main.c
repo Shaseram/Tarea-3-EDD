@@ -249,7 +249,7 @@ void mostrarTareas(Map *grafo) {
   free(monticulo);
 }
 
-void tareaElim(Map* grafo,Nodo* nodoTarea, char* nombreTarea, Stack* stack) {
+void tareaElim(Map *grafo, Nodo *nodoTarea, char *nombreTarea, Stack *stack) {
 
   eraseMap(grafo, nombreTarea);
 
@@ -306,40 +306,8 @@ void tareaCompletada(Map *grafo, Stack *stack) {
   } else tareaElim(grafo, nodoTarea, tarea, stack);
 }
 
-void deshacerAccion(Map *grafo, Stack *stack) {
-  if(stack_top(stack) == NULL) {
-    printf("No se ha registrado ninguna acción reciente!\n");
-    return;
-  }
 
-  Pila *aux = stack_pop(stack);
-  
-  switch(aux->accion) {
-    case AGREGAR_TAREA: 
-      if (searchMap(grafo, aux->nombre) != NULL) {
-        eraseMap(grafo, aux->nombre);
-        break;
-      }
-    case ELIMINAR_TAREA:
-      if (searchMap(grafo, aux->nombre) == NULL) {
-        insertMap(grafo, aux->nombre, aux->auxNodo);
-        break;
-      }
-    case PRECEDENCIA:
-      if (searchMap(grafo, aux->nombre) != NULL && searchMap(grafo, aux->auxNodo->nombreTarea) != NULL) {
-        Nodo* aux2 = firstList(aux->auxNodo->adj_edges);
-        while (aux2 != NULL) {
-          if (strcmp(aux2->nombreTarea, aux->nombre) == 0) {
-            popCurrent(aux->auxNodo->adj_edges);
-            break;
-          }
-          nextList(aux->auxNodo->adj_edges);
-        }
-      }
-  }
-}
-
-void importarArchivo(Map* grafo) {
+void importarArchivo(Map *grafo) {
   FILE* archImportar;
   char nombreArchivo[100];
   printf("Ingrese el nombre del archivo del cual desea importar tareas en formato .csv\n");

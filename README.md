@@ -13,7 +13,7 @@ Lo primero que hay que hacer, es en el repositorio de GitHub, apretar el botón 
 
 ===== 2 - LO QUE FUNCIONA Y LO QUE NO =====
   
-Al momento de escribir esto **20/05/2023, 13:49 PM**, todo el codigo funciona perfectamente a excepcion de la funcion **importarArchivo**, que por alguna razon al importar el archivo **tareas.csv** las precedencias salen con valor 0, no mostrando todas las tareas.
+Al momento de escribir esto **20/05/2023, 13:49 PM**, todo el codigo funciona perfectamente a excepcion de la funcion **importarArchivo**, que por alguna razon al importar el archivo **tareas.csv** las precedencias salen con valor 0, no mostrando todo
 
 ===== 3 - HERRAMIENTAS UTILIZADAS =====
 
@@ -33,7 +33,7 @@ Grupo = Clippers-2
   Colaboración = 20
   Responsabilidad = 20
   Comunicación = 20
-  Pje Total = 10000000000000000000000
+  Pje Total = 0
 ----------------------------------------
   
 ===== 5 - COEVALUACIÓN DEL APORTE INDIVIDUAL =====
@@ -41,13 +41,14 @@ Grupo = Clippers-2
 
 Aspectos positivos: 
 
-A mejorar: ACAPARA EL TRABAJO EL WEA Y LE FALTA CHUPARME MEJOR EL PREPUCIO
+A mejorar: 
+
 Estudiante: Vicente Arratia
   Participación = 
   Responsabilidad = 
-  Comunicación = 0
+  Comunicación = 
   Calidad del Trabajo = 
-  Trabajo en Equipo = 5
+  Trabajo en Equipo = 
   Pje Total = 
 ------------------------------
 
@@ -58,9 +59,9 @@ A mejorar:
 Estudiante: Vicente Mediano
   Participación = 
   Responsabilidad = 
-  Comunicación = 0
+  Comunicación = 
   Calidad del Trabajo = 
-  Trabajo en Equipo = 5
+  Trabajo en Equipo = 
   Pje Total = 
 ------------------------------
 
