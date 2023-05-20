@@ -13,7 +13,7 @@ Lo primero que hay que hacer, es en el repositorio de GitHub, apretar el botón 
 
 ===== 2 - LO QUE FUNCIONA Y LO QUE NO =====
   
-
+Al momento de escribir esto **20/05/2023, 13:49 PM**, todo el codigo funciona perfectamente a excepcion de la funcion **importarArchivo**, que por alguna razon al importar el archivo **tareas.csv** las precedencias salen con valor 0, no mostrando todas las tareas.
 
 ===== 3 - HERRAMIENTAS UTILIZADAS =====
 
@@ -91,4 +91,5 @@ typedef struct Pila {
   Nodo* auxNodo;
 } Pila;
 ````
-
+Es necesario entender la funcion **main** para entender el programa, para ello se crea un grafo para todas las tareas, ademas de crear el stack para la funcion **deshacerAccion**, con esto cada Tarea quedara almacenada con su struct correspondiente.
+Luego de eso, presentamos el menú de bienvenida, para realizar cada opción que desee el usuario, usamos variables como 'opcion' y 'titulo' para saber las opciones a elegir del usuario, además de poseer sus restricciones correspondientes para no generar errores, implementamos cada función con un ciclo switch asignando así a cada caso su función correspondiente, y la ultima opcion termina el programa.
