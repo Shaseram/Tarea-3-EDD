@@ -13,7 +13,6 @@ typedef struct {
   bool visitado;
   bool explorado;
   List *adj_edges;
-
 } Nodo;
 
 typedef enum Accion {
@@ -250,6 +249,34 @@ void mostrarTareas(Map *grafo) {
   free(monticulo);
 }
 
+void tareaElim(Map* grafo,Nodo* nodoTarea, char* nombreTarea, Stack* stack) {
+
+  eraseMap(grafo, nombreTarea);
+
+  Nodo* auxTarea = firstMap(grafo);
+  while(auxTarea != NULL) {
+    Nodo* auxAdj = firstList(auxTarea->adj_edges);
+    while(auxAdj != NULL) {
+      if (strcmp(auxAdj->nombreTarea, nombreTarea) == 0) {
+        popCurrent(auxTarea->adj_edges);
+      }
+      auxAdj = nextList(auxTarea->adj_edges);
+    }
+   auxTarea = nextMap(grafo); 
+  }
+
+
+  Pila* registro = (Pila *) malloc(sizeof(Pila));
+  registro->accion = ELIMINAR_TAREA;
+  
+  strcpy(registro->nombre, nodoTarea->nombreTarea);
+  registro->auxNodo = nodoTarea;
+  stack_push(stack, registro);
+
+  printf("La tarea '%s' ha sido marcada como completada y eliminada de la lista de tareas por hacer.\n", nombreTarea);
+
+}
+
 void tareaCompletada(Map *grafo, Stack *stack) {
   char tarea[32];
 
@@ -265,26 +292,18 @@ void tareaCompletada(Map *grafo, Stack *stack) {
 
   if (firstList(nodoTarea->adj_edges) != NULL) {
     printf("¡Advertencia! La tarea '%s' tiene relaciones de precedencia con otras tareas.\n",tarea);
-    printf("¿Estás seguro que deseas eliminar la tarea? (s/n): ");
-    char respuesta;
-    scanf(" %c", &respuesta);
-    if (respuesta != 's' && respuesta != 'S') {
+    printf("¿Estás seguro que deseas eliminar la tarea? (1-s/2-n): ");
+    int respuesta;
+    scanf("%d", &respuesta);
+    if (respuesta == 2) {
       printf("Operación cancelada. La tarea no ha sido eliminada.\n");
       return;
     }
-  }
-
-  Pila* registro = (Pila *) malloc(sizeof(Pila));
-  registro->accion = ELIMINAR_TAREA;
-  
-  strcpy(registro->nombre, tarea);
-  registro->auxNodo = nodoTarea;
-  stack_push(stack, registro);
-
-  eraseMap(grafo, tarea);
-  printf("La tarea '%s' ha sido marcada como completada y eliminada de la lista de tareas por hacer.\n",tarea);
-
-  
+    if(respuesta == 1) {
+      tareaElim(grafo, nodoTarea, tarea, stack);
+    }
+    
+  } else tareaElim(grafo, nodoTarea, tarea, stack);
 }
 
 void deshacerAccion(Map *grafo, Stack *stack) {
@@ -323,66 +342,52 @@ void deshacerAccion(Map *grafo, Stack *stack) {
 void importarArchivo(Map* grafo) {
   FILE* archImportar;
   char nombreArchivo[100];
-  printf("Ingrese el nombre del archivo del cual desea importar las tareas en formato .csv\n");
+  printf("Ingrese el nombre del archivo del cual desea importar tareas en formato .csv\n");
   scanf("%s", nombreArchivo);
 
   archImportar = fopen(nombreArchivo, "r");
+  printf("Se han importado los datos al archivo %s\n",nombreArchivo);
   if (!archImportar) {
     printf("Error: no se pudo abrir el archivo\n");
     return;
   }
-
+  
+  char delimit[]=" \t\r\n\v\f"; 
   char linea[1024];
-  fgets(linea, 1024, archImportar); // Saltar la primera línea
-
-  while(fgets(linea, sizeof(linea), archImportar) != NULL) {
-    Nodo* nuevaTarea = (Nodo*)malloc(sizeof(Nodo));
+  fgets(linea,1024,archImportar);
+  
+  while (fgets(linea,1024,archImportar) != NULL){
+    Nodo* nuevaTarea = NULL;
+    nuevaTarea = (Nodo *)malloc(sizeof(Nodo));
     nuevaTarea->adj_edges = createList();
-    
-    for(int i = 0; i < 3 ; i++) {
-      char* aux = get_csv_field(linea,i);
-      switch (i){
+    char* precedente = "";
+    for(int i = 0 ; i < 3 ; i++) {
+      char* aux = get_csv_field(linea, i);
+      switch(i) {
         case 0:
-          strcpy(nuevaTarea->nombreTarea,aux);
+          strcpy(nuevaTarea->nombreTarea, aux);
           break;
+
         case 1:
           nuevaTarea->prioridad = atoi(aux);
           break;
+
         case 2:
-        if (strlen(aux) > 1) {
-          char * precedentes = strtok (aux, " ");
-          while (precedentes != NULL) {
-            pushFront(nuevaTarea->adj_edges, precedentes);
-            precedentes = strtok(NULL, " ");
+          precedente = strtok(aux, delimit);
+          while(precedente != NULL) {
+            Nodo *aux2 = searchMap(grafo, precedente);
+            if (aux2 != NULL) pushBack(nuevaTarea->adj_edges, aux2);
+            precedente = strtok(NULL, delimit);
           }
-        }
-        break;
+          break;
+        
         default:
         break;
       }
     }
-    insertMap(grafo, strdup(nuevaTarea->nombreTarea), nuevaTarea);
+    insertMap(grafo, nuevaTarea->nombreTarea, nuevaTarea);
   }
   fclose(archImportar);
-}
-
-void mab(Map* mapa) {
-
-  Nodo * aux = firstMap(mapa);
-  while (aux != NULL) {
-    printf("NODO: %s -> prioridad %d\n\n", aux->nombreTarea, aux->prioridad);
-
-    Nodo* nodoLista = firstList(aux->adj_edges);
-    int cont = 1;
-    while(nodoLista != NULL) {
-      printf("nodo lista (c): %s -> prioridad %d\n", nodoLista->nombreTarea, nodoLista->prioridad);
-      nodoLista = nextList(aux->adj_edges);
-      cont++;
-    }
-
-    aux = nextMap(mapa);
-    printf("\n\n");
-  }
 }
 
 int main() {
@@ -409,7 +414,8 @@ int main() {
     printf("7. Salir del programa\n");
 
     scanf("%d", &opcion);
-    while (opcion < 1 || opcion > 8) {
+    while (opcion < 1 || opcion > 7) {
+      printf("Ingrese una opción válida!\n");
       scanf("%d", &opcion);
     }
 
@@ -435,9 +441,6 @@ int main() {
     case 7:
       printf("Cerrando el programa...\n");
       return 0;
-    case 8:
-      mab(grafo);
-      break;
     }
   }
   return 0;

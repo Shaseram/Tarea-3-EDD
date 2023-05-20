@@ -41,14 +41,13 @@ Grupo = Clippers-2
 
 Aspectos positivos: 
 
-A mejorar: 
-
+A mejorar: ACAPARA EL TRABAJO EL WEA Y LE FALTA CHUPARME MEJOR EL PREPUCIO
 Estudiante: Vicente Arratia
   Participación = 
   Responsabilidad = 
-  Comunicación = 
+  Comunicación = 0
   Calidad del Trabajo = 
-  Trabajo en Equipo = 
+  Trabajo en Equipo = 5
   Pje Total = 
 ------------------------------
 
@@ -59,9 +58,9 @@ A mejorar:
 Estudiante: Vicente Mediano
   Participación = 
   Responsabilidad = 
-  Comunicación = 
+  Comunicación = 0
   Calidad del Trabajo = 
-  Trabajo en Equipo = 
+  Trabajo en Equipo = 5
   Pje Total = 
 ------------------------------
 
