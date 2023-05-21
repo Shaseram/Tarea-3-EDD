@@ -149,7 +149,7 @@ void precedenciaTareas(Map *grafo, Stack *stack) {
     return;
   }
 
-  // Creamos dos auxuliares que contendran el nodo, ambos se buscan en el mapa de nodos del grafo y se les asigna el dato de tipo Nodo.
+  // Creamos dos auxiliares que contendrán el nodo, ambos se buscan en el mapa de nodos del grafo y se les asigna el dato de tipo Nodo.
   Nodo *aux1 = searchMap(grafo, tarea1);
   Nodo *aux2 = searchMap(grafo, tarea2);
 
@@ -207,7 +207,7 @@ void mostrarTareas(Map *grafo) {
   // Llamamos a la función reestablecer booleanos cada vez que se ingrese a esta función.
   reestablecerBooleanos(grafo);
 
-  // Asignamos primeramente a todas las tareas que no tengan precedencias el booleano de explorado como true. De igual forma se agregan los datos al monticulo.
+  // Asignamos primeramente a todas las tareas que no tengan precedencias el booleano de explorado como true. De igual forma se agregan los datos que no tienen precedencias al monticulo.
   Nodo *aux = firstMap(grafo);
   while(aux != NULL) {
     if (firstList(aux->adj_edges) == NULL) {
@@ -219,9 +219,9 @@ void mostrarTareas(Map *grafo) {
 
   
   while(heap_top(monticulo) != NULL) {
-    // Asignamos a actualTarea la raiz del monticulo (el dato con menor prioridad).
+    // Asignamos a actualTarea la raíz del monticulo (el dato con menor prioridad).
     Nodo *actualTarea = heap_top(monticulo);
-    // Se elimina la raiz del monticulo.
+    // Se elimina la raíz del monticulo.
     heap_pop(monticulo);
 
     // Agregamos a la lista la actual tarea, ya que esta es la con menor prioridad.
@@ -245,8 +245,9 @@ void mostrarTareas(Map *grafo) {
           }
           aux2 = nextList(aux->adj_edges);
         }
-        // Se verifica
+        // Se verifica al haber salido del bucle de la lista de adyacencia si es que tienePrecedencia no es verdadero al igual que el explorado de aux. Lo que significa que el nodo aux no tiene nodos adyacentes no visitados y aún no ha sido explorado.
         if (tienePrecedencia != true && aux->explorado != true) {
+          // Agregando así al monticulo el nodo aux.
           heap_push(monticulo, aux, aux->prioridad);
           aux->explorado = true;
         }
@@ -255,6 +256,7 @@ void mostrarTareas(Map *grafo) {
     }
   }
 
+  // Se muestran las tareas de la lista de tareas, la cuál almacenó de forma ordenada en prioridad y precendencia las tareas.
   printf("Tareas por hacer, ordenadas por prioridad y precedencia:\n");
   Nodo *auxTareas = firstList(listaTareas);
   while (auxTareas != NULL) {
@@ -274,14 +276,19 @@ void mostrarTareas(Map *grafo) {
   free(monticulo);
 }
 
+// Función llamada en tareaCompletada, la que cumple la función de eliminar la tarea de todo el programa.
 void tareaElim(Map *grafo, Stack *stack, char *nombreTarea, Nodo *nodoTarea) {
+  // Creamos la listaAuxiliar que guardará el nodo de la tarea en caso de que exista en la lista de adyacencia de otra tarea.
   List* listaAuxiliar = createList();
+  // Eliminamos dentro del grafo aquella tarea que coincida con la clave (nombreTarea).
   eraseMap(grafo, nombreTarea);  
 
+  // Recorremos el mapa de los nodos del grafo, buscando si el nodo de la lista adyacente de auxTarea coincide con el nombreTarea recibido por la función.
   Nodo* auxTarea = firstMap(grafo);
   while(auxTarea != NULL) {
     Nodo* auxAdj = firstList(auxTarea->adj_edges);
     while(auxAdj != NULL) {
+      // En caso de que exista el nodo de nombreTarea en la lista de adyacencia de auxTarea, se guardará en la listaAuxiliar y se eliminará completando la función que es eliminar la tarea indicada por el usuario (lo que implica eliminarla de todo el programa).
       if (strcmp(auxAdj->nombreTarea, nombreTarea) == 0) {
         pushBack(listaAuxiliar,auxTarea);
         popCurrent(auxTarea->adj_edges);
@@ -291,8 +298,10 @@ void tareaElim(Map *grafo, Stack *stack, char *nombreTarea, Nodo *nodoTarea) {
    auxTarea = nextMap(grafo); 
   }
 
+  /* Se crea la varible registro de tipo Pila, donde se iran guardando los registros (últimas acciones), en este caso es la acción de Eliminar Tarea. En este caso se hace uso de una lista auxiliar.*/
   Pila* registro = (Pila *) malloc(sizeof(Pila));
   registro->accion = ELIMINAR_TAREA;
+
   
   strcpy(registro->nombre, nodoTarea->nombreTarea);
   registro->auxNodo = nodoTarea;
@@ -310,12 +319,14 @@ void tareaCompletada(Map *grafo, Stack *stack) {
   printf("Ingrese el nombre de la tarea completada: ");
   leerCadena(tarea);
 
+  // En caso de que nombre ingresado por el usuario no exista dentro del programa se indicara que se ingrese uno válido
   Nodo *nodoTarea = searchMap(grafo, tarea);
   while(searchMap(grafo, tarea) == NULL) {
     printf("El nombre no existe dentro del programa! Ingrese uno válido: ");
     leerCadena(tarea);
   }
 
+  // En caso de que la lista de adyacencia del nodo ingresado por el usuario tenga relaciones de procedencia con otras tareas se preguntará al usuario si está seguro de que quiere eliminar esta tarea.
   if (firstList(nodoTarea->adj_edges) != NULL) {
     printf("\n¡Advertencia! La tarea '%s' tiene relaciones de precedencia con otras tareas.\n\n",tarea);
     printf("¿Estás seguro que deseas eliminar la tarea? (1-s/2-n): ");
@@ -325,32 +336,38 @@ void tareaCompletada(Map *grafo, Stack *stack) {
       printf("Operación cancelada. La tarea no ha sido eliminada.\n");
       return;
     }
+    // Si la respuesta es si (1) se procederá con la eliminación de la tarea llamando a la función tareaElim.
     if(respuesta == 1) {
       tareaElim(grafo, stack, tarea,  nodoTarea);
     }
-    
+    // Si no es el caso, simplemente se llama a la función sin preguntar al usuario.
   } else tareaElim(grafo, stack, tarea,  nodoTarea);
 }
 
 void deshacerAccion(Map *grafo, Stack *stack) {
+  // Se recibe stack del main, la cuál pudo tanto como haber sido llenada de acciones o simeplemente no tener ninguna. Por eso se pregunta si el top de la pila es NULL, ya que encaso de que sea NULL significa que la pila está vacía, por ende no hay ninguna acción reciente.
   if(stack_top(stack) == NULL) {
     printf("No se ha registrado ninguna acción reciente!\n");
     return;
   }
 
+  // Creamos un auxiliar de tipo Pila que almacena lo que retorna stack_pop.
   Pila *aux = stack_pop(stack);
-  
+
+  // Según que acción tenga aux se usará un switch, el cuál determinará que operaciones realizar.
   switch(aux->accion) {
     case AGREGAR_TAREA: 
+      // Se elimina del mapa la tarea con el nombre de aux en caso de que la acción haya sido agregar tarea.
       if (searchMap(grafo, aux->nombre) != NULL) {
         eraseMap(grafo, aux->nombre);
         break;
       }
     case ELIMINAR_TAREA:
+      // Se agrega al mapa nuevamente aquella tarea que tenga el nombre de aux en caso de que la acción haya sido eliminar.
       if (searchMap(grafo, aux->nombre) == NULL) {
         insertMap(grafo, aux->nombre, aux->auxNodo);
       }
-      
+      // Al tener que agregar la tarea nuevamente tendremos que asignarla a aquellas tareas que la tenían como precedente, por eso se usa la lista auxiliar que tiene el aux de tipo Pila. Con esto nos aseguramos que al deshacer acción todo vuelva a como se estuvo realmente al momento de haber elimnado una tarea.
       Nodo* auxLista = firstList(aux->listaAux);
       while(auxLista != NULL) {
         Nodo* auxMapa = searchMap(grafo, auxLista->nombreTarea);
@@ -359,6 +376,7 @@ void deshacerAccion(Map *grafo, Stack *stack) {
       }
       break;
     case PRECEDENCIA:
+      // Se elimina la precedencia en caso de que se haya agregado una precedencia entre dos tareas.
       if (searchMap(grafo, aux->nombre) != NULL && searchMap(grafo, aux->auxNodo->nombreTarea) != NULL) {
         Nodo* aux2 = firstList(aux->auxNodo->adj_edges);
         while (aux2 != NULL) {
@@ -373,11 +391,14 @@ void deshacerAccion(Map *grafo, Stack *stack) {
 }
 
 void importarArchivo(Map *grafo) {
+  //Se crea una variable de tipo FILE para el archivo que se importará.
   FILE* archImportar;
   char nombreArchivo[100];
+  //Se pregunta el nombre del archivo que se quiere importar.
   printf("Ingrese el nombre del archivo del cual desea importar tareas en formato .csv: \n");
   scanf("%s", nombreArchivo);
 
+  //Se abre el archivo en modo de lectura.
   archImportar = fopen(nombreArchivo, "r");
   printf("Se han importado los datos del archivo %s\n",nombreArchivo);
   if (!archImportar) {
@@ -387,13 +408,18 @@ void importarArchivo(Map *grafo) {
   
   char delimit[]=" \t\r\n\v\f"; 
   char linea[1024];
+  
+  //Se consigue la linea para hacer un salto y no tomar en cuenta la primera linea.
   fgets(linea,1024,archImportar);
   
   while (fgets(linea,1024,archImportar) != NULL){
+    //Mientras la linea contenga información se irá iterando y almacenando las tareas.
     Nodo* nuevaTarea = NULL;
     nuevaTarea = (Nodo *)malloc(sizeof(Nodo));
     nuevaTarea->adj_edges = createList();
     char* precedente = "";
+
+    //Según que retorne la función get_csv_field se irán haciendo las asignaciones de los datos.
     for(int i = 0 ; i < 3 ; i++) {
       char* aux = get_csv_field(linea, i);
       switch(i) {
@@ -424,6 +450,7 @@ void importarArchivo(Map *grafo) {
 }
 
 int main() {
+  // Se inicializa el grafo (mapa que contendrá sus nodos) y la pila que almacenará las acciones.
   Map *grafo = createMap(is_equal_string);
   Stack *stack = stack_create();
 

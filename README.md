@@ -9,7 +9,7 @@
 
 ===== 1 - COMO COMPILAR Y EJECUTAR LA TAREA =====
 
-Lo primero que hay que hacer, es en el repositorio de GitHub, apretar el botón que dice **< > Code** y copiar el link que se encuenta abajo de donde dice HTTPS. Nosotros usamos Replit asi que lo que hicimos despúes fue crear un nuevo replit, y seleccionar la opción **Import from Github**, y pegar el link previamente copiado en la sección GitHub URL, luego seleccionamos el botón azul **Import from Github** y el código se importará automáticamente, también, solamente con apretar **Run** el código ya se compila solo y funciona correctamente.
+Lo primero que hay que hacer, es en el repositorio de GitHub, apretar el botón que dice **<> Code** y copiar el link que se encuentra abajo de donde dice HTTPS. Nosotros usamos Replit asi que lo que hicimos despúes fue crear un nuevo replit, y seleccionar la opción **Import from Github**, y pegar el link previamente copiado en la sección GitHub URL, luego seleccionamos el botón azul **Import from Github** y el código se importará automáticamente, también, solamente con apretar **Run** el código ya se compila solo y funciona correctamente.
 
 ===== 2 - LO QUE FUNCIONA Y LO QUE NO =====
   
@@ -32,36 +32,36 @@ Grupo = Clippers-2
   Resolución de conflictos = 20
   Colaboración = 20
   Responsabilidad = 20
-  Comunicación = 20
-  Pje Total = 100
+  Comunicación = 15
+  Pje Total = 95
 ----------------------------------------
   
 ===== 5 - COEVALUACIÓN DEL APORTE INDIVIDUAL =====
 
 Aspectos positivos: Avance con antelación de la tarea y participativo.
 
-A mejorar: 
+A mejorar: No acaparar tanto el trabajo, ser mas comunicativo.
 
 Estudiante: Vicente Arratia
-  Participación = 
-  Responsabilidad = 
-  Comunicación = 
-  Calidad del Trabajo = 
-  Trabajo en Equipo = 
-  Pje Total = 
+  Participación = 20
+  Responsabilidad = 20
+  Comunicación = 15
+  Calidad del Trabajo = 20 
+  Trabajo en Equipo = 15
+  Pje Total = 90
 ------------------------------
 
-Aspectos positivos: Ninguno.
+Aspectos positivos: Buena disposición respecto a los trabajos, se preocupa por la estabilidad del grupo.
 
-A mejorar: 
+A mejorar: Tomar liderazgo o involucrarse más.
 
 Estudiante: Vicente Mediano
-  Participación = 
-  Responsabilidad = 
-  Comunicación = 
-  Calidad del Trabajo = 
-  Trabajo en Equipo = 
-  Pje Total = 
+  Participación = 20
+  Responsabilidad = 20
+  Comunicación = 15
+  Calidad del Trabajo = 20 
+  Trabajo en Equipo = 15
+  Pje Total = 90
 ------------------------------
 
 
@@ -107,7 +107,7 @@ La funcion  **nodosCompletados** tambien sale detallada en **main.c**.
 En la funcion  **mostrarTareas** se crea el monticulo de mínimos para ir guardando en la lista las tareas de forma ordenada según su precedencia y prioridad, ademas se crea la lista de tareas que se encargará de almacenar las tareas de forma ordenada y para que la tarea no colapse despues de usar esta funcion muchas veces, se llama a la funcion **reestablecerBooleanos**. Se asigna a todas las tareas que no tengan precedencias el booleano de explorado como true. Finalmente el programa muestra las tareas, ordenadas por prioridad y precedencia.
 
 En la funcion **tareaCompletada** que recibe un mapa y una pila, se ingresa el nombre de la tarea completada, se verifica que exista esta en el programa y se imprime un mensaje de error si no llega a existir.
-Se manda un mensaje de advertencia en caso de que la tarea tenga precedentes con otras tareas, y si el usuario se arrepiente se cancela la funcion. En caso de que este seguro o la tarea no tenga precedentes con otras, se llama a la funcion **tareaElim**, la cual elimina la tarea y ademas guarda la ultima accion realizada (en este caso eliminar la tarea) en la pila.
+Se manda un mensaje de advertencia en caso de que la tarea tenga relaciones de precedencias con otras tareas, y si el usuario se arrepiente se cancela la funcion. En caso de que este seguro o la tarea no tenga precedentes con otras, se llama a la funcion **tareaElim**, la cual elimina la tarea y ademas guarda la ultima accion realizada (en este caso eliminar la tarea) en la pila.
 
 La funcion **deshacerAccion** la cual recibe un mapa y una pila, se recorre la pila y se revisa cual fue la ultima accion (la cual era una variable que se guardaba al final de cada funcion) y dependiendo del caso, se borra una tarea, una precedencia o se vuelve a crear una tarea si se llego a borrar.
 
