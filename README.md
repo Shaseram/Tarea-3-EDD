@@ -5,7 +5,7 @@
 - Muestra tareas por realizar (tarea) ✔
 - Marca tareas como completadas (tarea) ✔
 - Deshace la ultima accion realizada (tarea) ✔
-- Cargar tareas desde un archivo de texto (nombre_archivo) ✔ ???????????
+- Cargar tareas desde un archivo de texto (nombre_archivo) ✔ 
 
 ===== 1 - COMO COMPILAR Y EJECUTAR LA TAREA =====
 
